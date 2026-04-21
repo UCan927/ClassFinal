@@ -1,8 +1,8 @@
 package net.roseboy.classfinal.plugin;
 
-import net.roseboy.classfinal.Const;
-import net.roseboy.classfinal.JarEncryptor;
-import net.roseboy.classfinal.util.StrUtils;
+import java.io.File;
+import java.util.List;
+
 import org.apache.maven.model.Build;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -13,8 +13,9 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 
-import java.io.File;
-import java.util.List;
+import net.roseboy.classfinal.Const;
+import net.roseboy.classfinal.JarEncryptor;
+import net.roseboy.classfinal.util.StrUtils;
 
 /**
  * 加密jar/war文件的maven插件
@@ -59,8 +60,12 @@ public class ClassFinalPlugin extends AbstractMojo {
      * @throws MojoFailureException   MojoFailureException
      */
     public void execute() throws MojoExecutionException, MojoFailureException {
-        Const.DEBUG = debug;
+
         Log logger = getLog();
+        logger.info("ClassFinal Encrypt 1.2.2, See https://github.com/UCan927/ClassFinal ");
+
+        Const.DEBUG = debug;
+
         Build build = project.getBuild();
 
         long t1 = System.currentTimeMillis();

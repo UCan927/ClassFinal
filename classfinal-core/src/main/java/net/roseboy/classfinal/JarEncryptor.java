@@ -1,11 +1,21 @@
 package net.roseboy.classfinal;
 
+import java.io.File;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javassist.ClassPool;
 import javassist.NotFoundException;
-import net.roseboy.classfinal.util.*;
-
-import java.io.File;
-import java.util.*;
+import net.roseboy.classfinal.util.ClassUtils;
+import net.roseboy.classfinal.util.EncryptUtils;
+import net.roseboy.classfinal.util.IoUtils;
+import net.roseboy.classfinal.util.JarUtils;
+import net.roseboy.classfinal.util.Log;
+import net.roseboy.classfinal.util.StrUtils;
 
 /**
  * java class加密
@@ -293,8 +303,18 @@ public class JarEncryptor {
      */
     public void addClassFinalAgent() {
         List<String> thisJarPaths = new ArrayList<>();
-        thisJarPaths.add(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
-        //paths.add(ClassPool.class.getProtectionDomain().getCodeSource().getLocation().getPath());
+        java.net.URI uri;
+        try
+        {
+            uri = this.getClass().getProtectionDomain().getCodeSource().getLocation().toURI();
+            // 关键：解码 URL 编码的路径（处理 %20 等）
+            thisJarPaths.add(uri.getPath());
+        } catch (URISyntaxException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            thisJarPaths.add(this.getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+        }
 
         //把本项目的class文件打包进去
         thisJarPaths.forEach(thisJar -> {
